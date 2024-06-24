@@ -1,0 +1,24 @@
+<launch>
+  <arg name="robot_description" default="$(find xacro)/xacro '$(find turtlebot3_description)/urdf/turtlebot3_custom_waffle.urdf.xacro'" />
+  <arg name="laser_visual" default="true"/>
+
+  <param name="robot_description" command="$(arg robot_description)"/>
+
+  <!-- Gazebo server -->
+  <node name="gazebo" pkg="gazebo_ros" type="gzserver" respawn="false" output="screen"/>
+  
+  <!-- Gazebo GUI -->
+  <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
+
+  <!-- Spawn the URDF model in Gazebo -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false"
+        args="-param robot_description -urdf -model turtlebot3_waffle" output="screen">
+    <param name="timeout" value="30.0" />
+  </node>
+
+  <!-- Robot State Publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="50.0"/>
+  </node>
+</launch>
+
